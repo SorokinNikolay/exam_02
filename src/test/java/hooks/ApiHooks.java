@@ -1,26 +1,16 @@
 package hooks;
 
-import com.codeborne.selenide.logevents.SelenideLogger;
-import io.cucumber.java.Before;
-import io.qameta.allure.restassured.AllureRestAssured;
-import io.qameta.allure.selenide.AllureSelenide;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import io.qameta.allure.Attachment;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ApiHooks {
 
-
-    @BeforeAll
-    public static void allureSubThreadParallel() {
-        String listenerName = "AllureSelenide";
-
-        if (!(SelenideLogger.hasListener(listenerName)))
-            SelenideLogger.addListener(listenerName,
-                    new AllureSelenide().
-                            screenshots(true).
-                            savePageSource(false));
+    @Attachment(value = "Читаемый Json файл", type = "application/json", fileExtension = ".txt")
+    public static byte[] getJson(String resourceName) throws IOException {
+        return Files.readAllBytes(Paths.get("src/test/resources", resourceName));
     }
+
 }
 
